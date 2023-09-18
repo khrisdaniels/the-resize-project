@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="Content-Security-Policy" content="img-src data:">
+	<title>theResize Project</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+	<div class="main-container">
+		<div id="home-upload" class="container step step--1">
+			<div class="content-container">
+				<h2 class="upload-heading">Upload your image</h2>
+				<div id="img-upload-drag-container" class="droparea">
+					<span class="drag-label full-width-label">Drag and drop your file here</span>
+					<span class="full-width-label">or</span>
+					<label class="browse-upload-label full-width-label" for="img-file">Browse your file</label>
+					<input type="file" id="img-file" accept="image/*" />
+				</div>
+				<div class="progressbar-container">
+					<progress id="progress-bar" value="0" max="100">20%</progress>
+					<span class="progress-num"></span>
+				</div>
+				<span class="file-type-label"><strong>Accepted file  types: </strong>.jpg, .jpeg, and .png</span>
+				<span class="file-type-label error">Format not supported!</span>
+			</div>
+		</div>
+		<div id="editor-platform" class="container step step--2">
+			<div class="content-container">
+				<div class="editor-header">
+					<div class="editor-header-content">
+						<div class="column-half left-half">
+							<button id="back-btn">Back</button>
+							<span class="file-name"></span>
+						</div>
+						<div class="column-half right-half">
+							<div class="color-picker-container">
+								<label for="color-input">Background colour</label>
+									<span class="pseudo-picker"></span>
+									<input id="color-input" type="color" value="#D3FAFF">
+							</div>
+							<button id="export-btn">Export</button>
+						</div>
+					</div>
+				</div>
+				<div class="editor-body">
+					<div class="editor-formats">
+						<h3>Formats</h3>
+						<div id="formats-container">
+							<div class="format-item">
+								<span class="social-title">Instagram</span>
+								<ul class="format-list">
+									<li class="format-list-item">
+										<div class="item-block">
+											<div class="frame-icon portrait"></div>
+											<div class="format-type-details">	
+												<span class="type-title full-width-label">Stories</span>
+												<span class="type-title size full-width-label">1080x1920</span>
+											</div>
+										</div>
+									</li>
+									<li class="format-list-item">
+										<div class="item-block">
+											<div class="frame-icon square"></div>
+											<div class="format-type-details">	
+												<span class="type-title full-width-label">Square</span>
+												<span class="type-title size full-width-label">1080x1080</span>
+											</div>
+										</div>
+									</li>
+									<li class="format-list-item">
+										<div class="item-block">
+											<div class="frame-icon landscape"></div>
+											<div class="format-type-details">	
+												<span class="type-title full-width-label">Landscape</span>
+												<span class="type-title size full-width-label">1920x1080</span>
+											</div>
+										</div>
+									</li>
+								</ul>
+							</div>
+							<div class="format-item">
+								<span class="social-title">Facebook</span>
+								<ul class="format-list">
+									<li class="format-list-item">
+										<div class="item-block">
+											<div class="frame-icon"></div>
+											<div class="format-type-details">	
+												<span class="type-title full-width-label">Post</span>
+												<span class="type-title size full-width-label">1080x1080</span>
+											</div>
+										</div>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div id="image-previews">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="script.js" type="text/javascript" charset="utf-8"></script>
+</body>
+</html>
