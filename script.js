@@ -215,11 +215,7 @@ const initApp = () => {
     };
 
     const createCanvas = (img, formatName, width, height) => {
-        console.log('create canvas executed');
-        console.log('img:', img);
-        console.log('formatName:', formatName);
-        console.log('width:', width);
-        console.log('height', height);
+        
     }
 
 
