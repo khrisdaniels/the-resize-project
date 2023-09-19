@@ -1,293 +1,277 @@
 const initApp = () => {
 
-	// Define built-in formats as an objects array	
-	const formats = [
-		// {
-		// 	name: "Instagram",
-		// 	size: {
-		// 		stories: {
-		// 			width: 1080,
-		// 			height: 1920
-		// 		},
-		// 		square: {
-		// 			width: 1080,
-		// 			height: 1080
-		// 		},
-		// 		landscape: {
-		// 			width: 1920,
-		// 			height: 1080
-		// 		},
-		// 	}
-		// },
-		{
-			name: "Facebook",
-			size: {
-				post: {
-					width: 1080,
-					height: 1080
-				}
-			}
-		},
-	];
-
-	// Define HTML elements into variables
-
-	const uploadBlockElement = document.getElementById('home-upload');
-	const editorBlockElement = document.getElementById('editor-platform');
-	const droparea = document.querySelector('.droparea');
-	const fileInput = document.getElementById('img-file');
-	const errorElement = document.querySelector('.file-type-label.error');
-	const progressBarContainer = document.querySelector('.progressbar-container');
-	const progressBar = document.getElementById('progress-bar');
-	const progressNum = document.querySelector('.progress-num');
-	const pseudoColorPicker = document.querySelector('span.pseudo-picker');
-	const colorPickerInput = document.getElementById('color-input');
-	const backButtonComponent = document.getElementById('back-btn');
-	const previewBox = document.getElementById('image-previews');
-	const theCanvas = document.getElementById('the-canvas');
-
-	
-	/*
-	* Function expressions
-	*/
-
-	// Handles displaying of the File Upload Elements
-	const loadFileUploadComponent = () => {
-
-		if (editorBlockElement.classList.contains('active')) {
-
-			editorBlockElement.style.opacity = 0;
-			setTimeout(() => {
-				editorBlockElement.classList.remove('active');
-			}, 250)
-		}
-
-		uploadBlockElement.classList.add('active');
-
-		setTimeout(() => {
-			uploadBlockElement.style.opacity = 1;
-			uploadBlockElement.style['z-index'] = 1;
-		}, 250);
+    // Define built-in formats as an objects array	
+    const formats = [
+        // {
+        // 	name: "Instagram",
+        // 	size: {
+        // 		stories: {
+        // 			width: 1080,
+        // 			height: 1920
+        // 		},
+        // 		square: {
+        // 			width: 1080,
+        // 			height: 1080
+        // 		},
+        // 		landscape: {
+        // 			width: 1920,
+        // 			height: 1080
+        // 		},
+        // 	}
+        // },
+        {
+            name: "Facebook",
+            size: {
+                post: {
+                    width: 1080,
+                    height: 1080
+                }
+            }
+        },
+    ];
+
+    // Define HTML elements into variables
+
+    const uploadBlockElement = document.getElementById('home-upload');
+    const editorBlockElement = document.getElementById('editor-platform');
+    const droparea = document.querySelector('.droparea');
+    const fileInput = document.getElementById('img-file');
+    const errorElement = document.querySelector('.file-type-label.error');
+    const progressBarContainer = document.querySelector('.progressbar-container');
+    const progressBar = document.getElementById('progress-bar');
+    const progressNum = document.querySelector('.progress-num');
+    const pseudoColorPicker = document.querySelector('span.pseudo-picker');
+    const colorPickerInput = document.getElementById('color-input');
+    const backButtonComponent = document.getElementById('back-btn');
+    const previewBox = document.getElementById('image-previews');
+    const theCanvas = document.getElementById('the-canvas');
+
+
+    /*
+     * Function expressions
+     */
+
+    // Handles displaying of the File Upload Elements
+    const loadFileUploadComponent = () => {
+
+        if (editorBlockElement.classList.contains('active')) {
 
-	}
+            editorBlockElement.style.opacity = 0;
+            setTimeout(() => {
+                editorBlockElement.classList.remove('active');
+            }, 250)
+        }
+
+        uploadBlockElement.classList.add('active');
 
-	// Handle displaying of Editor when file is uploaded or drop
-	const loadEditorComponent = () => {
+        setTimeout(() => {
+            uploadBlockElement.style.opacity = 1;
+            uploadBlockElement.style['z-index'] = 1;
+        }, 250);
 
-		if (uploadBlockElement.classList.contains('active')) {
-			uploadBlockElement.style.opacity = 0;
-			setTimeout(() => {
-				uploadBlockElement.classList.remove('active');
-			}, 250)
-		} 
+    }
 
-		editorBlockElement.classList.add('active');
+    // Handle displaying of Editor when file is uploaded or drop
+    const loadEditorComponent = () => {
 
-		setTimeout(() => {
-			editorBlockElement.style.opacity = 1;
-			editorBlockElement.style['z-index'] = 1;
-		}, 250);
+        if (uploadBlockElement.classList.contains('active')) {
+            uploadBlockElement.style.opacity = 0;
+            setTimeout(() => {
+                uploadBlockElement.classList.remove('active');
+            }, 250)
+        }
 
-		console.log('Editor loaded');
+        editorBlockElement.classList.add('active');
 
-	}
+        setTimeout(() => {
+            editorBlockElement.style.opacity = 1;
+            editorBlockElement.style['z-index'] = 1;
+        }, 250);
 
-	const onUploadProgress = (event) => {
-		if (event.lengthComputable) {
-			handleProgressBar(event);
-		} 
-	}
+        console.log('Editor loaded');
 
-	const handleProgressBar = (e) => {
-		showProgressBar();
-		const percentLoaded = Math.round((e.loaded / e.total) * 100);
-		progressBar.value = percentLoaded;
-		progressNum.textContent = percentLoaded + '%';
-	} 
+    }
 
-	const onImageLoad = (event) => {
-		let imageURL;
+    const onUploadProgress = (event) => {
+        if (event.lengthComputable) {
+            handleProgressBar(event);
+        }
+    }
 
-		if (event) {
-			imageURL = event.target.result;
-		}
+    const handleProgressBar = (e) => {
+        showProgressBar();
+        const percentLoaded = Math.round((e.loaded / e.total) * 100);
+        progressBar.value = percentLoaded;
+        progressNum.textContent = percentLoaded + '%';
+    }
 
-		setTimeout(loadEditorComponent, 500);
+    const onImageLoad = (event) => {
+        let imageURL;
 
-		processImage(imageURL);
-	}
+        if (event) {
+            imageURL = event.target.result;
+        }
 
-	const handleFiles = (file) => {
+        setTimeout(loadEditorComponent, 500);
 
-		const reader = new FileReader();
+        processImage(imageURL);
+    }
 
-		if (file && file.type.startsWith('image/')) {
+    const handleFiles = (file) => {
 
-			reader.addEventListener('progress', onUploadProgress);
+        const reader = new FileReader();
 
-			reader.addEventListener('load', onImageLoad);
+        if (file && file.type.startsWith('image/')) {
 
+            reader.addEventListener('progress', onUploadProgress);
 
-		} else {
-			handleNotImage();
-		}
+            reader.addEventListener('load', onImageLoad);
 
-		reader.readAsDataURL(file);
 
-	}
+        } else {
+            handleNotImage();
+        }
 
-	const handleNotImage = () => {
+        reader.readAsDataURL(file);
 
-		errorElement.style.display = 'block';
-	}
+    }
 
-	const handleInput = (event) => {
-		const files = event.target.files;
+    const handleNotImage = () => {
 
-		handleFiles(files[0]);
-	}
+        errorElement.style.display = 'block';
+    }
 
+    const handleInput = (event) => {
+        const files = event.target.files;
 
-	const handleDrop = (event) => {
-	 const dt = event.dataTransfer;
-	 const files = dt.files;
+        handleFiles(files[0]);
+    }
 
-	 handleFiles(files[0]);
 
-	}
+    const handleDrop = (event) => {
+        const dt = event.dataTransfer;
+        const files = dt.files;
 
-	const showProgressBar = () => {
-		progressBarContainer.style.visibility = 'visible';
-		setTimeout(() => {
-			progressBarContainer.style.opacity = 1;	
-		}, 50);
-	}
+        handleFiles(files[0]);
 
-	const getFileName = (event) => {
+    }
 
-		let fileName;
+    const showProgressBar = () => {
+        progressBarContainer.style.visibility = 'visible';
+        setTimeout(() => {
+            progressBarContainer.style.opacity = 1;
+        }, 50);
+    }
 
-		if (event && event.type === 'drop') {
+    const getFileName = (event) => {
 
-			const dt = event.dataTransfer;
-			const files = dt.files;
+        let fileName;
 
-			fileName = files[0].name;
+        if (event && event.type === 'drop') {
 
-		} else if (event && event.type === 'input') {
-			fileName = event.target.files[0].name;
-		} else {
-			alert('Error occured.');
-		}
+            const dt = event.dataTransfer;
+            const files = dt.files;
 
-		setFileName(fileName)
+            fileName = files[0].name;
 
-	}
+        } else if (event && event.type === 'input') {
+            fileName = event.target.files[0].name;
+        } else {
+            alert('Error occured.');
+        }
 
-	const setFileName = (fileName) => {
+        setFileName(fileName)
 
-		const fileNameLabel = document.querySelector('span.file-name');
-		const text = document.createTextNode(fileName);
+    }
 
-		fileNameLabel.appendChild(text);
+    const setFileName = (fileName) => {
 
-	}
+        const fileNameLabel = document.querySelector('span.file-name');
+        const text = document.createTextNode(fileName);
 
-	const processImage = (image) => {
+        fileNameLabel.appendChild(text);
 
-		if (image) {
-			// Instantiate Image constructor
-			const myImage = new Image();
-			myImage.src = image;
+    }
 
-			console.log(myImage)
+    const processImage = (image) => {
 
-			formats.forEach(format => {
-				for (const size in format.size) {
-					let { width, height } = format.size[size];
+        if (image) {
+            // Instantiate Image constructor
+            const myImage = new Image();
+            myImage.src = image;
 
-					createCanvas(myImage, size, width, height);
-				}
-			});
-		} else {
-			console.log('No image loaded');
-		}
-	};
+            console.log(myImage)
 
-	const createCanvas = (img, formatName, width, height) => {
-		const canvasElement = document.createElement('canvas');
-		const ctx = canvasElement.getContext('2d');
+            formats.forEach(format => {
+                for (const size in format.size) {
+                    let { width, height } = format.size[size];
 
-		canvasElement.classList.add(formatName);
-		canvasElement.width = width;
-		canvasElement.height = height;
+                    createCanvas(myImage, size, width, height);
+                }
+            });
+        } else {
+            console.log('No image loaded');
+        }
+    };
 
-		ctx.drawImage(img, 0, 0, width, height);
+    const createCanvas = (img, formatName, width, height) => {
+        console.log('create canvas executed');
+        console.log('img:', img);
+        console.log('formatName:', formatName);
+        console.log('width:', width);
+        console.log('height', height);
+    }
 
-		previewBox.appendChild(canvasElement);
-	}
 
-	// const wrapCanvas = (canvas, class) => {
-	// 	const wrapper = document.createElement('div');
-	// 	wrapper.classList.add(class);
+    /*
+     * /Function expressions
+     */
 
-	// 	if(canvas) {
-	// 		wrapper.appendChild(canvas);
-	// 	}
 
-	// 	previewBox.appendChild(wrapper);
+    loadFileUploadComponent();
 
-	// }
+    const dragActive = () => droparea.classList.add("green-border");
+    const dragInactive = () => droparea.classList.remove("green-border");
+    const prevents = (event) => event.preventDefault();
 
-	/*
-	* /Function expressions
-	*/
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        droparea.addEventListener(eventName, prevents);
+    });
 
+    ['dragenter', 'dragover'].forEach(eventName => {
+        droparea.addEventListener(eventName, dragActive);
+    });
 
-	loadFileUploadComponent();
+    ['dragleave', 'drop'].forEach(eventName => {
+        droparea.addEventListener(eventName, dragInactive);
+    });
 
-	const dragActive = () => droparea.classList.add("green-border");
-	const dragInactive = () => droparea.classList.remove("green-border"); 
-	const prevents = (event) => event.preventDefault();
+    // On file drop events
+    droparea.addEventListener('drop', (event) => {
+        handleDrop(event);
+        getFileName(event);
+    });
 
-	['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-		droparea.addEventListener(eventName, prevents);
-	});
+    // On File upload events
+    fileInput.addEventListener('input', (event) => {
 
-	['dragenter', 'dragover'].forEach(eventName => {
-		droparea.addEventListener(eventName, dragActive);
-	});
+        handleInput(event);
+        getFileName(event);
 
-	['dragleave', 'drop'].forEach(eventName => {
-		droparea.addEventListener(eventName, dragInactive);
-	});
+    });
 
-	// On file drop events
-	droparea.addEventListener('drop', (event) => {
-		handleDrop(event);
-		getFileName(event);
-	});
+    // Trigger click on Color Picker input field when pseudo color-picker is clicked
+    pseudoColorPicker.addEventListener('click', () => {
+        colorPickerInput.click();
+    });
 
-	// On File upload events
-	fileInput.addEventListener('input', (event) => {
+    // Listen to Color Picker input
+    // colorPickerInput.addEventListener('input', onColorChange);
 
-		handleInput(event);
-		getFileName(event);
-
-	});
-
-	// Trigger click on Color Picker input field when pseudo color-picker is clicked
-	pseudoColorPicker.addEventListener('click', () => {
-		colorPickerInput.click();
-	});
-
-	// Listen to Color Picker input
-	// colorPickerInput.addEventListener('input', onColorChange);
-
-	// Listen to 'Back' button click
-	backButtonComponent.addEventListener('click', () => {
-		window.location.reload();
-	});
+    // Listen to 'Back' button click
+    backButtonComponent.addEventListener('click', () => {
+        window.location.reload();
+    });
 
 }
 
