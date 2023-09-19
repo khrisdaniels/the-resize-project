@@ -30,7 +30,7 @@ const initApp = () => {
         },
     ];
 
-    // Define HTML elements into variables
+    // Reference HTML elements
 
     const uploadBlockElement = document.getElementById('home-upload');
     const editorBlockElement = document.getElementById('editor-platform');
@@ -213,10 +213,6 @@ const initApp = () => {
             console.log('No image loaded');
         }
     };
-
-    const createCanvas = (img, formatName, width, height) => {
-        
-    }
 
 
     /*
