@@ -2,27 +2,31 @@ const initApp = () => {
 
     // Define built-in formats as an objects array	
     const formats = [
-        // {
-        // 	name: "Instagram",
-        // 	size: {
-        // 		stories: {
-        // 			width: 1080,
-        // 			height: 1920
-        // 		},
-        // 		square: {
-        // 			width: 1080,
-        // 			height: 1080
-        // 		},
-        // 		landscape: {
-        // 			width: 1920,
-        // 			height: 1080
-        // 		},
-        // 	}
-        // },
+        {
+        	name: "Instagram",
+        	size: {
+        		stories: {
+                    orientation: 'portrait',
+        			width: 1080,
+        			height: 1920
+        		},
+        		square: {
+                    orientation: 'square',
+        			width: 1080,
+        			height: 1080
+        		},
+        		landscape: {
+                    orientation: 'landscape',
+        			width: 1920,
+        			height: 1080
+        		},
+        	}
+        },
         {
             name: "Facebook",
             size: {
                 post: {
+                    orientation: 'square',
                     width: 1080,
                     height: 1080
                 }
@@ -44,8 +48,10 @@ const initApp = () => {
     const colorPickerInput = document.getElementById('color-input');
     const backButtonComponent = document.getElementById('back-btn');
     const previewBox = document.getElementById('image-previews');
-    const theCanvas = document.getElementById('the-canvas');
+    const genImagesContainer = document.getElementById('generated-images-container');
+    const exportBtn = document.getElementById('export-btn');
 
+    const imageURLs = [];
 
     /*
      * Function expressions
@@ -200,18 +206,144 @@ const initApp = () => {
             const myImage = new Image();
             myImage.src = image;
 
-            console.log(myImage)
+            myImage.onload = () => {
+                formats.forEach(format => {
+                    for (const item in format.size) {
+                        const { orientation, width, height } = format.size[item];
 
-            formats.forEach(format => {
-                for (const size in format.size) {
-                    let { width, height } = format.size[size];
+                        createThumbnailCanvas(myImage, item, orientation);
 
-                    createCanvas(myImage, size, width, height);
-                }
-            });
+                        imageURLs.push(generateImage(myImage, item, orientation, width, height));
+                    }
+                });
+            }
         } else {
             console.log('No image loaded');
         }
+
+        zipImageURLs(imageURLs);
+    }
+
+    const createThumbnailCanvas = (image, format, orientation) => {
+        const thumbnailCanvas = document.createElement('canvas');
+
+        thumbnailCanvas.classList.add('canvas-preview-item');
+        thumbnailCanvas.classList.add(format);
+        thumbnailCanvas.classList.add(orientation);
+
+        const ctx = thumbnailCanvas.getContext('2d');
+
+        switch(orientation) {
+            case "portrait":
+                thumbnailCanvas.width = 150;
+                thumbnailCanvas.height = 200;
+                break;
+            case "square":
+                thumbnailCanvas.width = 200;
+                thumbnailCanvas.height = 200;
+                break;
+            case "landscape":
+                thumbnailCanvas.width = 200;
+                thumbnailCanvas.height = 150;
+                break;
+        }
+
+
+        // Calculate the aspect ratios of the canvas and the image
+        const canvasAspectRatio = thumbnailCanvas.width / thumbnailCanvas.height;
+        const imageAspectRatio = image.width / image.height;
+
+        // Calculate the scaling factors for width and height
+        let scaleFactor;
+        if (canvasAspectRatio > imageAspectRatio) {
+            scaleFactor = thumbnailCanvas.width / image.width;
+        } else {
+            scaleFactor = thumbnailCanvas.height / image.height;
+        }
+
+        // Calculate the dimensions to fit the image inside the canvas
+        const scaledWidth = image.width * scaleFactor;
+        const scaledHeight = image.height * scaleFactor;
+
+        // Calculate the positioning to center the image in the canvas
+        const xOffset = (thumbnailCanvas.width - scaledWidth) / 2;
+        const yOffset = (thumbnailCanvas.height - scaledHeight) / 2;
+
+        // Draw the image on the canvas with the calculated dimensions and positioning
+        ctx.drawImage(image, xOffset, yOffset, scaledWidth, scaledHeight);
+
+        previewBox.appendChild(thumbnailCanvas);
+
+    }
+
+    const generateImage = (image, format, orientation, formatWidth, formatHeight) => {
+        const canvas = document.createElement('canvas');
+
+        // Add custom data attribute
+        canvas.dataset.format = orientation;
+
+        // Set dimension of the canvas
+        canvas.width = formatWidth;
+        canvas.height = formatHeight;
+
+        // Set classes for the canvas
+        canvas.classList.add('image-item');
+        canvas.classList.add(format);
+        canvas.classList.add(orientation);
+
+        const ctx = canvas.getContext('2d');
+
+        // Calculate the aspect ratios of the canvas and the image
+        const canvasAspectRatio = canvas.width / canvas.height;
+        const imageAspectRatio = image.width / image.height;
+
+        // Calculate the scaling factors for width and height
+        let scaleFactor;
+        if (canvasAspectRatio > imageAspectRatio) {
+            scaleFactor = canvas.width / image.width;
+        } else {
+            scaleFactor = canvas.height / image.height;
+        }
+
+        // Calculate the dimensions to fit the image inside the canvas
+        const scaledWidth = image.width * scaleFactor;
+        const scaledHeight = image.height * scaleFactor;
+
+        // Calculate the positioning to center the image in the canvas
+        const xOffset = (canvas.width - scaledWidth) / 2;
+        const yOffset = (canvas.height - scaledHeight) / 2;
+
+        // Draw the image on the canvas with the calculated dimensions and positioning
+        ctx.drawImage(image, xOffset, yOffset, scaledWidth, scaledHeight);
+
+        genImagesContainer.appendChild(canvas);
+
+        const dataURL = canvas.toDataURL('image/jpg', 0.5);
+
+        return dataURL;
+
+    }
+
+    const zipImageURLs = (urlsArray) => {
+
+        debugger;
+        
+        const zip = new JSZip();
+
+        urlsArray.forEach((item, index) => {
+
+            const imageData = atob(item.split(',')[1]);
+
+            console.log(zip.file(`image${index + 1}.jpg`, imageData, { binary: true }));
+        });
+
+        zip.generateAsync({ type: 'blob' })
+            .then(blob => {
+
+                exportBtn.href = URL.createObjectURL(blob);
+                exportBtn.download = 'images.zip';
+
+        });
     }
 
 

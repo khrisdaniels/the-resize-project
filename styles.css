@@ -305,10 +305,16 @@ ul.format-list .item-block {
 	height: 30%;
 }
 
-canvas#the-canvas {
-    width: 100%;
-    max-width: 100%;
-    height: 100%;
+div#image-previews {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 10px;
+    overflow-y: scroll;
 }
 
-
+#generated-images-container {
+    display: none;
+}
