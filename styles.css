@@ -122,7 +122,7 @@ input#img-file {
     display: block;
     width: 100%;
     max-width: 100%;
-    border-bottom: 3px solid #E5E5E5;
+    border-bottom: 2px solid #E5E5E5;
 }
 
 .editor-header-content {
