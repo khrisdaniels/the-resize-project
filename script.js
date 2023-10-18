@@ -34,7 +34,7 @@ const initApp = () => {
         },
     ];
 
-    // Define HTML elements into variables
+    // Reference HTML elements
 
     const uploadBlockElement = document.getElementById('home-upload');
     const editorBlockElement = document.getElementById('editor-platform');
@@ -345,6 +345,7 @@ const initApp = () => {
 
         });
     }
+    };
 
 
     /*
