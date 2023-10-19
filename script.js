@@ -325,25 +325,8 @@ const initApp = () => {
     }
 
     const zipImageURLs = (urlsArray) => {
-
-        debugger;
         
         const zip = new JSZip();
-
-        urlsArray.forEach((item, index) => {
-
-            const imageData = atob(item.split(',')[1]);
-
-            console.log(zip.file(`image${index + 1}.jpg`, imageData, { binary: true }));
-        });
-
-        zip.generateAsync({ type: 'blob' })
-            .then(blob => {
-
-                exportBtn.href = URL.createObjectURL(blob);
-                exportBtn.download = 'images.zip';
-
-        });
     }
 
 

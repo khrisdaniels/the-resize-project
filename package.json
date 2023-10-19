@@ -1,0 +1,11 @@
+{
+  "name": "the resize project",
+  "author": "Khris Danielle <khrisdanielss@gmail.com> (https://github.com/khrisdaniels)",
+  "description": "A tool to resize single image to different social media platform formats.",
+  "version": "1.1.0",
+  "license": "ISC",
+  "homepage": "index.php",
+  "dependencies": {
+    "jszip": "^3.10.1"
+  }
+}
