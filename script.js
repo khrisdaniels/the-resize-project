@@ -51,8 +51,6 @@ const initApp = () => {
     const genImagesContainer = document.getElementById('generated-images-container');
     const exportBtn = document.getElementById('export-btn');
 
-    const imageURLs = [];
-
     /*
      * Function expressions
      */
@@ -120,7 +118,9 @@ const initApp = () => {
 
         setTimeout(loadEditorComponent, 500);
 
-        processImage(imageURL);
+        processImage(imageURL).then((imageURLs) => {
+            zipImageURLs(imageURLs);
+        });
     }
 
     const handleFiles = (file) => {
@@ -200,28 +200,31 @@ const initApp = () => {
     }
 
     const processImage = (image) => {
+        return new Promise((resolve, reject) => {
+            if (image) {
+                // Instantiate Image constructor
+                const myImage = new Image();
+                myImage.src = image;
 
-        if (image) {
-            // Instantiate Image constructor
-            const myImage = new Image();
-            myImage.src = image;
+                myImage.onload = () => {
+                    const imageURLs = [];
 
-            myImage.onload = () => {
-                formats.forEach(format => {
-                    for (const item in format.size) {
-                        const { orientation, width, height } = format.size[item];
+                    formats.forEach(format => {
+                        for (const item in format.size) {
+                            const { orientation, width, height } = format.size[item];
 
-                        createThumbnailCanvas(myImage, item, orientation);
+                            createThumbnailCanvas(myImage, item, orientation);
 
-                        imageURLs.push(generateImage(myImage, item, orientation, width, height));
-                    }
-                });
+                            imageURLs.push(generateImage(myImage, item, orientation, width, height));
+                        }
+                    });
+                    resolve(imageURLs);
+                };
+            } else {
+                console.log('No image loaded');
+                reject('No image loaded');
             }
-        } else {
-            console.log('No image loaded');
-        }
-
-        zipImageURLs(imageURLs);
+        });
     }
 
     const createThumbnailCanvas = (image, format, orientation) => {
@@ -277,6 +280,7 @@ const initApp = () => {
     }
 
     const generateImage = (image, format, orientation, formatWidth, formatHeight) => {
+
         const canvas = document.createElement('canvas');
 
         // Add custom data attribute
@@ -318,15 +322,48 @@ const initApp = () => {
 
         genImagesContainer.appendChild(canvas);
 
-        const dataURL = canvas.toDataURL('image/jpg', 0.5);
+        let extension = image.src.split(';')[0].split('/')[1];
+        let dataURL;
+
+        if (extension === 'jpeg') {
+            dataURL = canvas.toDataURL('image/jpeg', 1);
+        } else if (extension === 'png') {
+            dataURL = canvas.toDataURL('image/png');
+        }
 
         return dataURL;
 
     }
 
     const zipImageURLs = (urlsArray) => {
+
         
         const zip = new JSZip();
+
+
+        urlsArray.forEach((item, index) => {
+
+            let base64Data = item.split(',')[1];
+            let imageFormat = item.split(';')[0].split(':')[1];
+
+            if (imageFormat === 'image/jpeg') {
+              imageFormat = 'jpeg'; // Set the format to 'jpeg' if it's 'image/jpeg'
+            } else if (imageFormat === 'image/png') {
+              imageFormat = 'png'; // Set the format to 'png' if it's 'image/png'
+            }
+
+            // Add the Blob to the zip archive with a unique name
+            zip.file('file_' + index + '.' + imageFormat, base64Data, {base64: true});
+        });
+
+        zip.generateAsync({type: 'blob'})
+            .then(content => {
+
+                let zipURL = URL.createObjectURL(content);
+
+                exportBtn.href = zipURL;
+                exportBtn.download = 'images.zip';
+            });
     }
 
 
