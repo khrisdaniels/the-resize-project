@@ -17,7 +17,7 @@ the-resize-project  is a handy tool for resizing a single image into various dim
 ## Features
 
 - Resize a single image into multiple dimensions for popular social media platforms.
-- Supported platforms: Facebook, Instagram, Twitter, and more.
+- Supported platforms: Facebook & Instagram.
 - Easy-to-use graphical user interface (GUI) interface.
 
 ## License
