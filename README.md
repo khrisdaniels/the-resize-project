@@ -12,7 +12,7 @@ An app that resizes a single image into multiple images ready for social media p
 
 ## Description
 
-The Image Resizer for Social Media is a handy tool for resizing a single image into various dimensions suitable for social media posts and stories. It simplifies the process of creating content that looks great on different social media platforms by automatically generating the required sizes.
+the-resize-project  is a handy tool for resizing a single image into various dimensions suitable for social media posts and stories. It simplifies the process of creating content that looks great on different social media platforms by automatically generating the required sizes.
 
 ## Features
 
